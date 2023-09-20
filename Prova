@@ -1,0 +1,18 @@
+SELECT ?author ?authorLabel ?birthPlaceLabel ?occupationLabel ?deathPlaceLabel
+WHERE {
+  ?author wdt:P31 wd:Q5;  # Trova tutte le persone (che sono autori)
+  {
+    ?author wdt:P19/wdt:P131* wd:Q1279;  # Che sono nati nelle Marche o nelle loro unità amministrative inferiori
+  } UNION {
+    ?author wdt:P937/wdt:P131* wd:Q1279;  # O che hanno lavorato nelle Marche o nelle loro unità amministrative inferiori
+  } UNION {
+    ?author wdt:P20/wdt:P131* wd:Q1279.   # O che sono morti nelle Marche o nelle loro unità amministrative inferiori
+  }
+  OPTIONAL {
+    ?author wdt:P19 ?birthPlace.  # Luogo di nascita (opzionale)
+    ?author wdt:P106 ?occupation.  # Occupazione (opzionale)
+    ?author wdt:P20 ?deathPlace.  # Luogo di morte (opzionale)
+  }
+  
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "it". }
+}
